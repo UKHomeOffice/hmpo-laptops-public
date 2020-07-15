@@ -1,0 +1,8 @@
+- hosts: all
+  become: true
+  roles:
+    - darkwizard242.googlechrome
+    - oefenweb.slack
+  vars:
+    googlechrome_desired_state: latest
+    googlechrome_repo_el_gpgcheck: no #fix apt-key error
