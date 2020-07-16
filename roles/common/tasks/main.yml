@@ -39,16 +39,18 @@
     line: GRUB_CMDLINE_LINUX="ipv6.disable=1"
 
 - name: install chrome ansible galaxy 
-  command: ansible-galaxy install darkwizard242.googlechrome
-  creates: /home/ansible/.ansible/roles/darkwizard242.googlechrome/LICENSE
+  command:
+    cmd: ansible-galaxy install darkwizard242.googlechrome
+    creates: /home/ansible/.ansible/roles/darkwizard242.googlechrome/LICENSE
   become_user: ansible
 
 
 
  
 - name: install slack ansible galaxy 
-  command: ansible-galaxy install oefenweb.slack
-  creates: /home/ansible/.ansible/roles/oefenweb.slack/LICENSE.txt
+  command: 
+    cmd: ansible-galaxy install oefenweb.slack
+    creates: /home/ansible/.ansible/roles/oefenweb.slack/LICENSE.txt
   become_user: ansible
 
 - name: run ansible 
