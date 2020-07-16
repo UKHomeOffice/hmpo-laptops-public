@@ -1,10 +1,11 @@
 GRUBFILE='/etc/default/grub'
 USER=oem
 SSHKEY=/home/$USER/.ssh/id_rsa
+TIMEOUT=2
 
 ##Disable IPv6
 echo Removing IPv6 functionality
-sudo sed -i -e 's/""/"ipv6.disable=1"/g'  /etc/default/grub
+sudo sed -i -e 's/""/"ipv6.disable=1"/g'  $GRUBFILE
 sudo sed -i -e 's/quiet splash"/quiet splash ipv6.disable=1"/g'  $GRUBFILE
 
 ##Test IPv 6 config lines are in place
@@ -23,7 +24,7 @@ fi
 sudo apt-get update && sudo apt-get upgrade -y && sudo apt-get install python3-pip -y
 sudo pip3 install ansible
 sudo mkdir -p /etc/ansible
-echo localhost| sudo tee /etc/ansible/hosts
+echo localhost ansible_host=localhost ansible_connection=local ansible_python_interpreter=/usr/bin/python3| sudo tee /etc/ansible/hosts
 
 #TEST ANSIBLE IS INSTALLED
 echo confirming ansible is installed... && ansible -m ping all && echo installed || echo not installed
@@ -38,10 +39,23 @@ ansible-galaxy install oefenweb.slack
 
 
 #Run playbook
-ansible-playbook playbook.yml
+ansible-playbook site.yml
 
 ##Test if chrome is installed 
-google-chrome &
-slack &
+google-chrome 2>/dev/null &
+GOOGLEPID=$!
+echo testing Google $GOOGLEPID
+sleep $TIMEOUT
+kill $GOOGLEPID 
+echo Google checked
+
+##Test if slack is installed 
+slack 2>/dev/null >/dev/null &
+SLACKPID=$! 
+echo testing Slack $SLACKPID
+sleep $TIMEOUT
+kill $SLACKPID
+echo Slack checked
+
 
 

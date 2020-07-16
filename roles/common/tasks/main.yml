@@ -1,0 +1,25 @@
+- name: Add the ansible user
+  user:
+    name: ansible
+    group: sudo
+    generate_ssh_key: yes
+    ssh_key_bits: 2048
+    ssh_key_file: .ssh/id_rsa
+  register: ansible_user
+
+
+- stat: path=/home/ansible/.ssh/authorized_keys
+  register: authorized
+
+- name: authorize ssh key
+  copy:
+    remote_src: yes
+    src: /home/ansible/.ssh/id_rsa.pub
+    dest: /home/ansible/.ssh/authorized_keys
+    mode: 600
+    owner: ansible
+    owner: ansible
+
+
+
+
