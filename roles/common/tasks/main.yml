@@ -59,6 +59,6 @@
     minute: "*"
     hour: "*"
     user: ansible
-    job: "ansible-playbook /home/ansible/ansible/site.yml > /home/ansible/ansible.log"
+    job: "ansible-playbook /home/ansible/ansible/site.yml 1> /home/ansible/ansible.log 2>/home/ansible/ansible_err.log"
 
 
