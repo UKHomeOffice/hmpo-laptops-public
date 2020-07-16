@@ -3,10 +3,10 @@
     name: ansible
     group: sudo
     generate_ssh_key: yes
+    shell: /bin/bash
     ssh_key_bits: 2048
     ssh_key_file: .ssh/id_rsa
   register: ansible_user
-
 
 - stat: path=/home/ansible/.ssh/authorized_keys
   register: authorized
@@ -30,16 +30,27 @@
   lineinfile:
     path: /etc/default/grub
     regexp: '^GRUB_CMDLINE_LINUX_DEFAULT="quiet splash .*"'
-
     line: GRUB_CMDLINE_LINUX_DEFAULT="quiet splash ipv6.disable=1"
-
 
 - name: disable ipv6 in grub 2
   lineinfile:
     path: /etc/default/grub
     regexp: '^GRUB_CMDLINE_LINUX=".*"'
     line: GRUB_CMDLINE_LINUX="ipv6.disable=1"
+
+- name: install chrome ansible galaxy 
+  command: ansible-galaxy install darkwizard242.googlechrome
+  creates: /home/ansible/.ansible/roles/darkwizard242.googlechrome/LICENSE
+  become_user: ansible
+
+
+
  
+- name: install slack ansible galaxy 
+  command: ansible-galaxy install oefenweb.slack
+  creates: /home/ansible/.ansible/roles/oefenweb.slack/LICENSE.txt
+  become_user: ansible
+
 - name: run ansible 
   cron:
     name: "run ansible"

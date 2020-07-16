@@ -29,8 +29,10 @@ echo localhost ansible_host=localhost ansible_connection=local ansible_python_in
 ##INSTALL GALAXY DEPENDANCIES
 sudo mkdir -p /etc/ansible/roles
 sudo mkdir -p /usr/share/ansible/roles
+ANSIBLE_ROLES_PATH=/etc/ansible/roles
 echo APT_KEY_DONT_WARN_ON_DANGEROUS_USAGE=1 |\
        	sudo tee /etc/environment #circumnavigate ansible apt error
+
 ansible-galaxy install darkwizard242.googlechrome
 ansible-galaxy install oefenweb.slack
 
@@ -41,8 +43,6 @@ echo confirming ansible is installed... &&\
        	ansible-playbook site.yml  ||\
        	echo not installed
 
-ansible-playbook site.yml
-#Run playbook
 
 ##Test IPv 6 config lines are in place
 echo Checking IPv6 lines are in grub config file 
