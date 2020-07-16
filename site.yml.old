@@ -1,0 +1,13 @@
+- hosts: all
+  pre_tasks:
+    - name: Install Python if not already present.
+      raw: test -e /usr/bin/python || (apt -y update && apt install -y python-minimal)
+      changed_when: False
+  become: true
+  roles:
+    - darkwizard242.googlechrome
+    - oefenweb.slack
+    - common
+  vars:
+    googlechrome_desired_state: latest
+    googlechrome_repo_el_gpgcheck: no #fix apt-key error

@@ -20,6 +20,11 @@
     owner: ansible
     owner: ansible
 
+- name: install codebase
+  git:
+     repo: https://bitbucket.org/automationlogic/ubuntu_build.git
+     dest: /home/ansible/config
+     update: yes
 
 
 
