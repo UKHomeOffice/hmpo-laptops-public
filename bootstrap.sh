@@ -1,7 +1,7 @@
 GRUBFILE='/etc/default/grub'
 USER=oem
 SSHKEY=/home/$USER/.ssh/id_rsa
-TIMEOUT=3
+TIMEOUT=4
 
 ##Disable IPv6
 echo Removing IPv6 functionality
@@ -64,15 +64,19 @@ sleep $TIMEOUT
 kill $SLACKPID
 echo Slack checked
 
+sleep $TIMEOUT
 
 #Test ansible user
 PUB_KEY_CHECKSUM=$(sudo md5sum /home/ansible/.ssh/id_rsa.pub| awk '{print $1}')
 AUTH_USERS_CHECKSUM=$(sudo md5sum /home/ansible/.ssh/authorized_keys| awk '{print $1}')
-if [ ${PUB_KEY_CHECKSUM} == ${AUTH_USERS_CHECKSUM} ]; then
+if [ "${PUB_KEY_CHECKSUM}" == "${AUTH_USERS_CHECKSUM}" ]; then
 	echo "ssh key in authorized"
 else
 	echo "ssh key not in authorised"
 fi
 
-
-
+if [ -d "/home/ansible/ansible" ]; then
+	echo "repo installed"
+else
+	echo "repo not installed"
+fi

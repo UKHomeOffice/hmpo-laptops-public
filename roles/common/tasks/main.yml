@@ -23,8 +23,29 @@
 - name: install codebase
   git:
      repo: https://bitbucket.org/automationlogic/ubuntu_build.git
-     dest: /home/ansible/config
+     dest: /home/ansible/ansible
      update: yes
 
+- name: disable ipv6 disable ipv6 in grub
+  lineinfile:
+    path: /etc/default/grub
+    regexp: '^GRUB_CMDLINE_LINUX_DEFAULT="quiet splash .*"'
+
+    line: GRUB_CMDLINE_LINUX_DEFAULT="quiet splash ipv6.disable=1"
+
+
+- name: disable ipv6 in grub 2
+  lineinfile:
+    path: /etc/default/grub
+    regexp: '^GRUB_CMDLINE_LINUX=".*"'
+    line: GRUB_CMDLINE_LINUX="ipv6.disable=1"
+ 
+- name: run ansible 
+  cron:
+    name: "run ansible"
+    minute: "*"
+    hour: "*"
+    user: ansible
+    job: "ansible-playbook /home/ansible/ansible/site.yml > /home/ansible/ansible.log"
 
 
