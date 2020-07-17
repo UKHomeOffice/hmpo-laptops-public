@@ -16,7 +16,9 @@ git clone https://bitbucket.org/automationlogic/ubuntu_build.git
 
 ## Next steps
 
-Once the repo has been cloned onto the target machine, (in a terminal window) `cd /home/oem/ubuntu_build` then run the `bootstrap.sh`.
+Once the repo has been cloned onto the target machine, (in a terminal window) `cd /home/oem/ubuntu_build` then run `bash bootstrap.sh`.
+
+There will be some prompts related to RSA keys, accept the defaults.
 
 This will print output to the screen to inform you of the progress. Check the output for errors and address any that you see - this might involve changes to the scripts being used to accommodate new issues but hopefully the errors are already known so the error message should indicate how to fix it.
 
