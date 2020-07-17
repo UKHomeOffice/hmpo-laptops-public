@@ -23,7 +23,7 @@ echo Removing IPv6 functionality
 sudo sed -i -e 's/""/"ipv6.disable=1"/g'  $GRUBFILE
 sudo sed -i -e 's/quiet splash"/quiet splash ipv6.disable=1"/g'  $GRUBFILE
 
-##INSTALL ANSIBLE AND DEPENDANCIES
+##INSTALL ANSIBLE AND DEPENDENCIES
 echo installing ansible and configuring ansible
 rm -rf ~/.cache
 if [ -f $SSHKEY ]; then
