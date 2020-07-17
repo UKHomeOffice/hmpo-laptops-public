@@ -32,7 +32,6 @@
      recurse: yes
      path: /home/ansible/ansible
      owner: ansible
-     group: ansible
 
 - name: disable ipv6 disable ipv6 in grub
   lineinfile:
