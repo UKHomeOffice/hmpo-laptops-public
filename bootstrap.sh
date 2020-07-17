@@ -6,7 +6,7 @@ TMP_SUDO_FILE=/tmp/temp
 PROD_SUDO_FILE=/etc/sudoers
 
 ##Enable passwordless sudo
-sudo sed -e s,sudo\ ALL=\(ALL:ALL\)\ ALL,sudoALL=\(ALL:ALL\)\ NOPASSWD:\ ALL,g /etc/sudoers |\
+sudo sed -e "s,^%sudo.*ALL$,%sudo   ALL=(ALL:ALL) NOPASSWD: ALL$,g" /etc/sudoers |\
        	sudo tee $TMP_SUDO_FILE
 
 sudo visudo -c -f $TMP_SUDO_FILE &&\
