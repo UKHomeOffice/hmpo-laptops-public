@@ -13,10 +13,6 @@ sudo visudo -c -f $TMP_SUDO_FILE &&\
        	sudo cp $TMP_SUDO_FILE $PROD_SUDO_FILE ||\
        	echo sudo syntax wrong
 
-##Enable SSH
-sudo sed -i -e 's/Host \*/Host 127.0.0.1/g' /etc/ssh/ssh_config
-sudo systemctl restart sshd
-sudo systemctl enable sshd
 
 ##Disable IPv6
 echo Removing IPv6 functionality
@@ -34,12 +30,16 @@ else
 fi
 sudo apt-get update &&\
        	sudo apt-get upgrade -y &&\
-       	sudo apt-get install python3-pip -y
+       	sudo apt-get install python3-pip ssh -y
 sudo pip3 install ansible
 sudo mkdir -p /etc/ansible
 
 echo localhost ansible_host=localhost ansible_connection=local ansible_python_interpreter=/usr/bin/python3| sudo tee /etc/ansible/hosts
 
+##Enable SSH
+sudo sed -i -e 's/Host \*/Host 127.0.0.1/g' /etc/ssh/ssh_config
+sudo systemctl restart sshd
+sudo systemctl enable sshd
 
 ##INSTALL GALAXY DEPENDANCIES
 sudo mkdir -p /etc/ansible/roles
