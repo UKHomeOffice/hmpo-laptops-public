@@ -2,14 +2,28 @@ GRUBFILE='/etc/default/grub'
 USER=oem
 SSHKEY=/home/$USER/.ssh/id_rsa
 TIMEOUT=4
+TMP_SUDO_FILE=/tmp/temp
+PROD_SUDO_FILE=/etc/sudoers
+
+##Enable passwordless sudo
+sudo sed -e s,sudo\ ALL=\(ALL:ALL\)\ ALL,sudoALL=\(ALL:ALL\)\ NOPASSWD:\ ALL,g /etc/sudoers |\
+       	sudo tee $TMP_SUDO_FILE
+
+sudo visudo -c -f $TMP_SUDO_FILE &&\
+       	sudo cp $TMP_SUDO_FILE $PROD_SUDO_FILE ||\
+       	echo sudo syntax wrong
+
+##Enable SSH
+sudo sed -i -e 's/Host \*/Host 127.0.0.1/g' /etc/ssh/ssh_config
+sudo systemctl restart sshd
+sudo systemctl enable sshd
 
 ##Disable IPv6
 echo Removing IPv6 functionality
 sudo sed -i -e 's/""/"ipv6.disable=1"/g'  $GRUBFILE
 sudo sed -i -e 's/quiet splash"/quiet splash ipv6.disable=1"/g'  $GRUBFILE
 
-
-##INSTALL ANSIBLE
+##INSTALL ANSIBLE AND DEPENDANCIES
 echo installing ansible and configuring ansible
 rm -rf ~/.cache
 if [ -f $SSHKEY ]; then
@@ -23,6 +37,7 @@ sudo apt-get update &&\
        	sudo apt-get install python3-pip -y
 sudo pip3 install ansible
 sudo mkdir -p /etc/ansible
+
 echo localhost ansible_host=localhost ansible_connection=local ansible_python_interpreter=/usr/bin/python3| sudo tee /etc/ansible/hosts
 
 
@@ -40,9 +55,11 @@ ansible-galaxy install oefenweb.slack
 #TEST ANSIBLE IS INSTALLED
 echo confirming ansible is installed... &&\
        	ansible -m ping all &&\
-       	ansible-playbook site.yml  ||\
+       	echo installed  ||\
        	echo not installed
 
+#RUN ANSIBLE PLAYBOOK
+ansible-playbook site.yml
 
 ##Test IPv 6 config lines are in place
 echo Checking IPv6 lines are in grub config file 

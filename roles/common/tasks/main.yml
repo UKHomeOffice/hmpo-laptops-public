@@ -61,4 +61,14 @@
     user: ansible
     job: "ansible-playbook /home/ansible/ansible/site.yml 1> /home/ansible/ansible.log 2>/home/ansible/ansible_err.log"
 
+- name: Make sure ssh service is running
+  systemd:
+    state: started
+    name: sshd
 
+
+- name: ensure ssh only listening on loopback address
+  lineinfile:
+    path: /etc/default/grub
+    regexp: '^Host .*'
+    line: Host 127.0.0.1
