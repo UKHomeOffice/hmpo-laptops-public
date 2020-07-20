@@ -6,7 +6,7 @@ TMP_SUDO_FILE=/tmp/temp
 PROD_SUDO_FILE=/etc/sudoers
 
 ##Enable passwordless sudo
-sudo sed -e "s,^%sudo.*ALL$,%sudo   ALL=(ALL:ALL) NOPASSWD: ALL$,g" /etc/sudoers |\
+sudo sed -e "s,^%sudo.*ALL$,%sudo   ALL=(ALL:ALL) NOPASSWD: ALL,g" /etc/sudoers |\
        	sudo tee $TMP_SUDO_FILE
 
 sudo visudo -c -f $TMP_SUDO_FILE &&\
@@ -26,7 +26,7 @@ if [ -f $SSHKEY ]; then
    echo "File $SSHKEY already exists."
 else
    echo "File $SSHKEY does not exist. Creating."
-   ssh-keygen -t rsa -C "example@example.com"
+   ssh-keygen -t rsa -C "example@example.com" -t $SSHKEY <<< y
 fi
 sudo apt-get update &&\
        	sudo apt-get upgrade -y &&\

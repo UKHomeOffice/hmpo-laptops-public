@@ -18,7 +18,6 @@
     dest: /home/ansible/.ssh/authorized_keys
     mode: 600
     owner: ansible
-    owner: ansible
 
 - name: install codebase
   git:
@@ -66,7 +65,7 @@
     minute: "0"
     hour: "*/2"
     user: ansible
-    job: "ansible-playbook /home/ansible/ansible/site.yml 1> /home/ansible/ansible.log 2>/home/ansible/ansible_err.log"
+    job: "/usr/local/bin/ansible-playbook /home/ansible/ansible/site.yml 1> /home/ansible/ansible.log 2>/home/ansible/ansible_err.log"
 
 - name: Make sure ssh service is running
   systemd:
