@@ -18,7 +18,6 @@
     dest: /home/ansible/.ssh/authorized_keys
     mode: 600
     owner: ansible
-    owner: ansible
 
 - name: install codebase
   git:
