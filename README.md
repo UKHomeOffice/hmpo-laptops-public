@@ -5,7 +5,11 @@ This repo contains files used to configure an oem install of Ubuntu 18.04 LTS. T
 
 ## Pre-requisites
 
-As `git` is not installed this is a pre-requisite for using this repo. Run the following from the terminal after completing the oem install steps.
+After booting the laptop off an Ubuntu 18.04 LTS USB key and choosing the oem install you will then be prompted to remove the USB key and reboot.
+
+On logging in, connect to WiFi, browse to https://bitbucket.org/automationlogic/ubuntu_build to confirm connectivity.
+
+As `git` is not installed this is a pre-requisite for using this repo. Run the following from the terminal (`Ctrl+Alt+T`) after completing the oem install steps.
 
 ```
 sudo apt update
@@ -14,13 +18,22 @@ cd /home/oem
 git clone https://bitbucket.org/automationlogic/ubuntu_build.git
 ```
 
+[PLEASE NOTE: If the "Software Updater" pops up saying there are new updates, then apply these updates.]
+
 ## Next steps
 
-Once the repo has been cloned onto the target machine, (in a terminal window) `cd /home/oem/ubuntu_build` then run `bash bootstrap.sh`.
+Using the same terminal window...
 
-There will be some prompts related to RSA keys, accept the defaults.
+```
+cd ubuntu_build
+bash bootstrap.sh
+```
 
 This will print output to the screen to inform you of the progress. Check the output for errors and address any that you see - this might involve changes to the scripts being used to accommodate new issues but hopefully the errors are already known so the error message should indicate how to fix it.
+
+Following the ansible changes the laptop should be ready for the final steps.
+
+First of all remove the wifi credentials then follow the guidance given on internal docs to harden the laptop prior to handing to the user..
 
 ## Work flow
 
@@ -43,3 +56,4 @@ To confirm things are working as expected you can:
 1. Check for the existence of this repo, `ls /home/ansible/ && echo -e "$(tput setaf 2 && tput bold)\n\nIT'S FINE :-)\n\n"` (i.e. does the folder location exist, `git pull` in this folder should also work)
 1. Check the logs for ansible. These are in the ansible home directory `ansible.log` and `ansible_err.log`.
 1. Run the `bootstrap.sh` again... `bash bootstrap.sh` - this will reapply the correct config and ensure everything is setup correctly.
+1. Run the playbook... `ansible-playbook main.yml` - use the crontab command if having trouble..
