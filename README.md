@@ -29,7 +29,17 @@ Once bootstrapped, software is installed and configuration changes are made. Ple
 The config changes create a cron job that's scheduled to run ansible at regular intervals. This allows for config to be modified and confirmed by the script.
 
 When the cron job runs it will...
+
 1. Update the ansible repo (`git pull`) within the ansible user's home directory.
 1. Execute the updated ansible task.
 
 Changes to this repo should (according to the planned design) allow for ongoing management of laptops setup in this way. A change to the repo will be picked up by the running cron job and then that change can be implemented on the laptop.
+
+## Manual checks
+
+To confirm things are working as expected you can:
+
+1. Check the crontab for the ansible user, `sudo crontab -l -u ansible`
+1. Check for the existence of this repo, `ls /home/ansible/ && echo -e "$(tput setaf 2 && tput bold)\n\nIT'S FINE :-)\n\n"` (i.e. does the folder location exist, `git pull` in this folder should also work)
+1. Check the logs for ansible. These are in the ansible home directory `ansible.log` and `ansible_err.log`.
+1. Run the `bootstrap.sh` again... `bash bootstrap.sh` - this will reapply the correct config and ensure everything is setup correctly.
