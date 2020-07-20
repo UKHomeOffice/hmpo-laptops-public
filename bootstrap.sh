@@ -26,7 +26,7 @@ if [ -f $SSHKEY ]; then
    echo "File $SSHKEY already exists."
 else
    echo "File $SSHKEY does not exist. Creating."
-   ssh-keygen -t rsa -C "example@example.com"
+   ssh-keygen -t rsa -C "example@example.com" <<< y
 fi
 sudo apt-get update &&\
        	sudo apt-get upgrade -y &&\
