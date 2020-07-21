@@ -3,13 +3,13 @@
 This repo contains files used to configure an oem install of Ubuntu 18.04 LTS. This has been tested on Dell XPS 13 7390 hardware.
 
 
-## Pre-requisites
+## Pre-requisites for using this repo
 
-After booting the laptop off an Ubuntu 18.04 LTS USB key and choosing the oem install you will then be prompted to remove the USB key and reboot.
+* An oem install of Ubuntu 18.04 LTS - installed from a USB key by choosing the "OEM Install (for manufacturers)" option.
 
-On logging in, connect to WiFi, browse to https://bitbucket.org/automationlogic/ubuntu_build to confirm connectivity.
+* A WiFi connection/Network connection. Try browsing to https://bitbucket.org/automationlogic/ubuntu_build in a browser to confirm connectivity.
 
-As `git` is not installed this is a pre-requisite for using this repo. Run the following from the terminal (`Ctrl+Alt+T`) after completing the oem install steps.
+* Git needs to be installed so run the following from the terminal (`Ctrl+Alt+T`), or skip this and head to "Alternative steps".. [Hint: Ctrl+Shift+v will paste into the ubuntu terminal, Ctrl+c to copy from the browser]
 
 ```
 sudo apt update
@@ -18,11 +18,15 @@ cd /home/oem
 git clone https://bitbucket.org/automationlogic/ubuntu_build.git
 ```
 
-[PLEASE NOTE: If the "Software Updater" pops up saying there are new updates, then apply these updates.]
+[PLEASE NOTE: If the "Software Updater" pops up saying there are new updates, then apply these updates. As this uses the same package manager. i.e. apt, you can't do updates from the command line and through the UI at the same time]
 
-## Next steps
+## Alternative steps
 
-Using the same terminal window...
+Helper scripts have been written and put onto a USB key to avoid having to read any further here. Simply put the USB key into the OEM install, and from a terminal window run `bash /media/oem/USB/laptop_post_install.sh`. Doing this will guide you through what's necessary.
+
+## Next steps (if not using the alternative)
+
+Using the same terminal...
 
 ```
 cd ubuntu_build
@@ -31,13 +35,11 @@ bash bootstrap.sh
 
 This will print output to the screen to inform you of the progress. Check the output for errors and address any that you see - this might involve changes to the scripts being used to accommodate new issues but hopefully the errors are already known so the error message should indicate how to fix it.
 
-Following the ansible changes the laptop should be ready for the final steps.
-
-First of all remove the wifi credentials then follow the guidance given on internal docs to harden the laptop prior to handing to the user..
+After the ansible configuration the laptop is ready for QA. Head back to the internal documentation for more details.
 
 ## Work flow
 
-Once bootstrapped, software is installed and configuration changes are made. Please check the code for details.
+Once bootstrapped, software is installed and configuration changes are made. Please check the code for specific details.
 
 The config changes create a cron job that's scheduled to run ansible at regular intervals. This allows for config to be modified and confirmed by the script.
 
@@ -48,7 +50,7 @@ When the cron job runs it will...
 
 Changes to this repo should (according to the planned design) allow for ongoing management of laptops setup in this way. A change to the repo will be picked up by the running cron job and then that change can be implemented on the laptop.
 
-## Manual checks
+## Manual checks if you need to troubleshoot
 
 To confirm things are working as expected you can:
 
