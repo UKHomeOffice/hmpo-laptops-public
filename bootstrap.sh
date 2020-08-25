@@ -46,7 +46,7 @@ sudo mkdir -p /etc/ansible/roles
 sudo mkdir -p /usr/share/ansible/roles
 ANSIBLE_ROLES_PATH=/etc/ansible/roles
 echo APT_KEY_DONT_WARN_ON_DANGEROUS_USAGE=1 |\
-       	sudo tee /etc/environment #circumnavigate ansible apt error
+       	sudo tee -a /etc/environment # circumnavigate ansible apt error
 
 ansible-galaxy install darkwizard242.googlechrome
 ansible-galaxy install oefenweb.slack
