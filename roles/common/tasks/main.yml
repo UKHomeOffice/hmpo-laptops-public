@@ -67,6 +67,5 @@
     user: ansible
     job: "/usr/local/bin/ansible-playbook /home/ansible/ansible/site.yml 1> /home/ansible/ansible.log 2>/home/ansible/ansible_err.log"
 
-
 - include_tasks: bionic.yml
-  when: ansible_facts['distribution'] == 'Ubuntu' and ansible_facts['distribution_major_version'] == 18
+  when: ansible_facts['distribution'] == 'Ubuntu' and ansible_facts['distribution_major_version'] == '18'
