@@ -21,7 +21,7 @@
 
 - name: install codebase
   git:
-     repo: https://bitbucket.org/automationlogic/ubuntu_build.git
+     repo: https://github.com/UKHomeOffice/hmpo-laptops-public.git
      dest: /home/ansible/ansible
      update: yes
 
