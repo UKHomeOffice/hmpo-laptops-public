@@ -2,9 +2,4 @@
   become: true
   connection: local
   roles:
-    - darkwizard242.googlechrome
-    - oefenweb.slack
     - common
-  vars:
-    googlechrome_desired_state: latest
-    googlechrome_repo_el_gpgcheck: no #fix apt-key error
