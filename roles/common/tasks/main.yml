@@ -21,7 +21,7 @@
 
 - name: install codebase
   git:
-     repo: https://github.com/UKHomeOffice/hmpo-laptops-public.git
+     repo: https://bitbucket.org/automationlogic/ubuntu_build.git
      dest: /home/ansible/ansible
      update: yes
 
@@ -44,23 +44,53 @@
     regexp: '^GRUB_CMDLINE_LINUX=".*"'
     line: GRUB_CMDLINE_LINUX="ipv6.disable=1"
 
-- name: install chrome ansible galaxy 
+- name: REMOVE chrome ansible galaxy 
   command:
-    cmd: ansible-galaxy install darkwizard242.googlechrome
+    cmd: ansible-galaxy remove darkwizard242.googlechrome
     creates: /home/ansible/.ansible/roles/darkwizard242.googlechrome/LICENSE
   become_user: ansible
-
-
-
  
-- name: install slack ansible galaxy 
+- name: REMOVE slack ansible galaxy 
   command: 
-    cmd: ansible-galaxy install oefenweb.slack
+    cmd: ansible-galaxy remove oefenweb.slack
     creates: /home/ansible/.ansible/roles/oefenweb.slack/LICENSE.txt
   become_user: ansible
 
-- name: run ansible 
+# Ansible 2.8 or higher is required for snap installs to work
+# There are two parts to this
+# 1) add the source `apt-add-repository --yes --update ppa:ansible/ansible`
+# 2) do the upgrade `apt-get upgrade ansible`
+- name: Install classic snap versions of Chromium and Slack
+  snap:
+    name:
+      - chromium
+      - slack
+    classic: yes
+
+- name: Ensure management-hooks directory exists
+  file:
+    path: /usr/local/dsst/management-hooks
+    state: directory
+    mode: 0775  
+
+- name: Write vpn hook script to /usr/local/dsst/management-hooks/
+  template:
+    src: run-vpn-hook.sh
+    dest: /usr/local/dsst/management-hooks/run-vpn-hook.sh
+    owner: root
+    group: root
+    mode: 0755  
+
+- name: Create cronjob for the vpn hook 
   cron:
+    name: "Run VPN management hook"
+    minute: "*/2"
+    user: ansible
+    job: "/usr/local/dsst/management-hooks/run-vpn-hook.sh >> /var/log/dsst/run-vpn-hook.log"
+
+- name: Mark ansible-playbook cronjob as absent 
+  cron:
+    state: absent
     name: "run ansible"
     minute: "0"
     hour: "*/2"
