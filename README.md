@@ -24,4 +24,4 @@ There is a bootstrap.sh that should help with the setup, use at your own risk. T
 
 ## Intended usage
 
-As part of a scheduled cron job this ansible is intended to do install a subset of required software and ensure that some standard configuration is applied before the managed laptops login to the VPN.
+As part of a scheduled cron job this ansible is intended to run. The cronjob installs a subset of required software to run the ansible playbook. The playbook ensures that some standard configuration is applied before the managed laptops login to the VPN where they pick up more specific config.
