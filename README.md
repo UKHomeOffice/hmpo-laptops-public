@@ -4,11 +4,11 @@ This repo contains files used for basic configuration of Ubuntu Desktop 18.04 us
 
 ## Pre-requisites for using this repo
 
-* An oem install of Ubuntu Desktop 18.04 LTS installed on Ubuntu Certified hardware.
+* Ubuntu Desktop 18.04 LTS installed on Ubuntu Certified hardware.
 
 * A working internet connection on the target laptop.
 
-* Updated packages and install git to pull this repo onto the target and ansible (with updates) for doing snap installs.
+* Updated packages and installs. Specifically, `git` to pull this repo onto the target and `ansible` (2.8 or higher) for running snap installs in the playbook.
 
 ```
 sudo apt-add-repository -y --update ppa:ansible/ansible
@@ -16,12 +16,7 @@ sudo apt update
 sudo apt install git ansible
 cd $TARGET_DIRECTORY
 git clone $TARGET_GIT_URL
-```
 
-## Using this repo
+## Intended usage of this repo
 
-There is a bootstrap.sh that should help with the setup, use at your own risk. The intended use of this repo doesn't require it so it may not be up-to-date.
-
-## Intended usage
-
-As part of a scheduled cron job this ansible is intended to run. The cronjob installs a subset of required software to run the ansible playbook. The playbook ensures that some standard configuration is applied before the managed laptops login to the VPN where they pick up more specific config.
+As part of a scheduled cron job this ansible can be pulled down and run on a target computer to complete basic configuration. 

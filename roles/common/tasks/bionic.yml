@@ -1,5 +1,0 @@
-- name: packages required for 18.04LTS bionic beaver
-  apt:
-    package:
-      - openvpn
-      - network-manager-openvpn-gnome

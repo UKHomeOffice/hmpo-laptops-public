@@ -1,37 +1,3 @@
-- name: Add the ansible user
-  user:
-    name: ansible
-    group: sudo
-    generate_ssh_key: yes
-    shell: /bin/bash
-    ssh_key_bits: 2048
-    ssh_key_file: .ssh/id_rsa
-  register: ansible_user
-
-- stat: path=/home/ansible/.ssh/authorized_keys
-  register: authorized
-
-- name: authorize ssh key
-  copy:
-    remote_src: yes
-    src: /home/ansible/.ssh/id_rsa.pub
-    dest: /home/ansible/.ssh/authorized_keys
-    mode: 600
-    owner: ansible
-
-- name: install codebase
-  git:
-     repo: https://github.com/UKHomeOffice/hmpo-laptops-public.git
-     dest: /home/ansible/ansible
-     update: yes
-
-- name: ensure repo owned by ansible
-  file: 
-     state: directory
-     recurse: yes
-     path: /home/ansible/ansible
-     owner: ansible
-
 - name: disable ipv6 disable ipv6 in grub
   lineinfile:
     path: /etc/default/grub
@@ -44,22 +10,11 @@
     regexp: '^GRUB_CMDLINE_LINUX=".*"'
     line: GRUB_CMDLINE_LINUX="ipv6.disable=1"
 
-- name: REMOVE chrome ansible galaxy 
-  command:
-    cmd: ansible-galaxy remove darkwizard242.googlechrome
-    creates: /home/ansible/.ansible/roles/darkwizard242.googlechrome/LICENSE
-  become_user: ansible
- 
-- name: REMOVE slack ansible galaxy 
-  command: 
-    cmd: ansible-galaxy remove oefenweb.slack
-    creates: /home/ansible/.ansible/roles/oefenweb.slack/LICENSE.txt
-  become_user: ansible
-
 # Ansible 2.8 or higher is required for snap installs to work
 # There are two parts to this
 # 1) add the source `apt-add-repository --yes --update ppa:ansible/ansible`
 # 2) do the upgrade `apt-get upgrade ansible`
+# The repository is setup in the crontab job
 - name: Install classic snap versions of Chromium and Slack
   snap:
     name:
@@ -67,36 +22,9 @@
       - slack
     classic: yes
 
-- name: Ensure management-hooks directory exists
-  file:
-    path: /usr/local/dsst/management-hooks
-    state: directory
-    mode: 0775  
-
-- name: Write vpn hook script to /usr/local/dsst/management-hooks/
-  template:
-    src: run-vpn-hook.sh
-    dest: /usr/local/dsst/management-hooks/run-vpn-hook.sh
-    owner: root
-    group: root
-    mode: 0755  
-
-- name: Create cronjob for the vpn hook 
-  cron:
-    name: "Run VPN management hook"
-    minute: "0"
-    hour: "*/2"
-    user: ansible
-    job: "/usr/local/dsst/management-hooks/run-vpn-hook.sh >> /var/log/dsst/run-vpn-hook.log"
-
-- name: Mark ansible-playbook cronjob as absent 
-  cron:
-    state: absent
-    name: "run ansible"
-    minute: "0"
-    hour: "*/2"
-    user: ansible
-    job: "/usr/local/bin/ansible-playbook /home/ansible/ansible/site.yml 1> /home/ansible/ansible.log 2>/home/ansible/ansible_err.log"
-
-- include_tasks: bionic.yml
-  when: ansible_facts['distribution'] == 'Ubuntu' and ansible_facts['distribution_major_version'] == '18'
+#Add content from bionic.yml
+- name: packages required for 18.04LTS bionic beaver
+  apt:
+    package:
+      - openvpn
+      - network-manager-openvpn-gnome
