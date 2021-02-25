@@ -84,6 +84,7 @@
 - name: Create cronjob for the vpn hook 
   cron:
     name: "Run VPN management hook"
+    minute: "0"
     hour: "*/2"
     user: ansible
     job: "/usr/local/dsst/management-hooks/run-vpn-hook.sh >> /var/log/dsst/run-vpn-hook.log"
