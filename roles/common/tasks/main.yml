@@ -1,0 +1,30 @@
+- name: disable ipv6 disable ipv6 in grub
+  lineinfile:
+    path: /etc/default/grub
+    regexp: '^GRUB_CMDLINE_LINUX_DEFAULT="quiet splash .*"'
+    line: GRUB_CMDLINE_LINUX_DEFAULT="quiet splash ipv6.disable=1"
+
+- name: disable ipv6 in grub 2
+  lineinfile:
+    path: /etc/default/grub
+    regexp: '^GRUB_CMDLINE_LINUX=".*"'
+    line: GRUB_CMDLINE_LINUX="ipv6.disable=1"
+
+# Ansible 2.8 or higher is required for snap installs to work
+# There are two parts to this
+# 1) add the source `apt-add-repository --yes --update ppa:ansible/ansible`
+# 2) do the upgrade `apt-get upgrade ansible`
+# The repository is setup in the crontab job
+- name: Install classic snap versions of Chromium and Slack
+  snap:
+    name:
+      - chromium
+      - slack
+    classic: yes
+
+#Add content from bionic.yml
+- name: packages required for 18.04LTS bionic beaver
+  apt:
+    package:
+      - openvpn
+      - network-manager-openvpn-gnome
