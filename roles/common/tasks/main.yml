@@ -22,9 +22,11 @@
       - slack
     classic: yes
 
-#Add content from bionic.yml
-- name: packages required for 18.04LTS bionic beaver
+- name: Install packages
   apt:
-    package:
+    name:
       - openvpn
       - network-manager-openvpn-gnome
+      - vim
+      - jq
+    state: present
